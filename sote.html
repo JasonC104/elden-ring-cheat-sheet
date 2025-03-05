@@ -167,6 +167,9 @@
           const tocLink = document.createElement('a');
           tocLink.href = `#${locationId}`;
           tocLink.textContent = location;
+          tocLink.onclick = () => {
+            localStorage.setItem('sote-hash', `#${locationId}`);
+          }
           tocItem.appendChild(tocLink);
           tocList.appendChild(tocItem);
         }
@@ -202,6 +205,11 @@
         itemContainer.appendChild(notes);
 
         itemsContainer.appendChild(itemContainer);
+      }
+
+      const locationHash = localStorage.getItem('sote-hash')
+      if (locationHash) {
+        location.hash = locationHash
       }
     })()
 
