@@ -14,44 +14,40 @@
       padding: 10px;
     }
 
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 12px 15px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-      font-weight: 600;
-      color: #333;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    tr:hover {
-      background-color: #f0f0f0;
-    }
-
-    #search {
-      width: calc(100% - 22px);
+    .location-header {
+      font-size: 1.5em;
+      /* Increased font size */
+      font-weight: bold;
+      margin-top: 25px;
+      /* Increased top margin */
+      margin-bottom: 15px;
+      /* Increased bottom margin */
       padding: 10px;
-      margin-bottom: 20px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
+      /* Added padding */
+      background-color: #f0f0f0;
+      /* Light gray background */
+      border-left: 5px solid #007bff;
+      /* Blue left border */
+      border-radius: 5px;
+      /* Added border radius */
+      color: #333;
+      /* Darker text color */
+    }
+
+    .item-container {
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      padding: 10px;
       border-radius: 4px;
-      font-size: 16px;
+    }
+
+    .item-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .item-detail {
+      margin-bottom: 5px;
     }
 
     /* Mobile-friendly styling */
@@ -59,123 +55,19 @@
       .container {
         padding: 5px;
       }
-
-      table,
-      thead,
-      tbody,
-      th,
-      td,
-      tr {
-        display: block;
-      }
-
-      thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-      }
-
-      tr {
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        border-radius: 4px;
-      }
-
-      td {
-        border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 50%;
-      }
-
-      td:before {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: 600;
-      }
-
-      /* Assign data-label attributes to each cell */
-      th:nth-of-type(1),
-      td:nth-of-type(1):before {
-        content: "Step";
-      }
-
-      th:nth-of-type(2),
-      td:nth-of-type(2):before {
-        content: "Completed?";
-      }
-
-      th:nth-of-type(3),
-      td:nth-of-type(3):before {
-        content: "Item/Objective";
-      }
-
-      th:nth-of-type(4),
-      td:nth-of-type(4):before {
-        content: "Category";
-      }
-
-      th:nth-of-type(5),
-      td:nth-of-type(5):before {
-        content: "Location";
-      }
-
-      th:nth-of-type(6),
-      td:nth-of-type(6):before {
-        content: "Notes";
-      }
-
-      #search {
-        width: calc(100% - 12px);
-        padding: 6px;
-        font-size: 14px;
-      }
-
-      th,
-      td {
-        padding: 8px;
-      }
     }
 
     /* Extra small screens (e.g., 320px) */
     @media (max-width: 320px) {
       .container {
         padding: 2px;
-        /* Further reduce container padding */
-      }
-
-      td {
-        padding-left: 40%;
-        /* Adjust padding for extremely small screens */
-      }
-
-      td:before {
-        width: 35%;
-        /* Adjust label width */
-        font-size: 12px;
-        /* Reduce label font size */
-      }
-
-      #search {
-        font-size: 12px;
-        /* Further reduce search bar font size */
-      }
-
-      th,
-      td {
-        padding: 6px;
-        /* Further reduce table cell padding */
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="container" id="tablesContainer">
+  <div class="container" id="itemsContainer">
   </div>
 
   <script>
@@ -247,7 +139,7 @@
     (async () => {
       const res = await fetch("test.csv")
       console.log(res)
-      console.log(res.text())
+      console.log(await res.text())
     })()
 
     // const data = await fetch("EldenRingWalkthrough-BaseGame.csv")
@@ -277,46 +169,58 @@
     2751,FALSE,Erdtree Flower,Crafting,Lands Between,"You can find this all over in Limgrave and other areas. Early game you can find three near the Agheel Lake North SoG, near the swords in the ground"
     `;
 
-    const tablesContainer = document.getElementById('tablesContainer');
+    const itemsContainer = document.getElementById('itemsContainer');
     const lines = CSVToArray(data);
     const headers = lines[0];
 
     // Load checkbox states from local storage
     const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates')) || {};
 
-    const locationTables = {};
+    let currentLocation = null;
 
     for (let i = 1; i < lines.length; i++) {
       const cells = lines[i];
-      const location = cells[4]; // Location is the 5th column
-      if (!locationTables[location]) {
-        locationTables[location] = document.createElement('table');
-        const table = locationTables[location];
-        table.innerHTML = `<thead><tr><th>Completed?</th><th>Item/Objective</th><th>Category</th><th>Notes</th></tr></thead><tbody></tbody>`;
-        tablesContainer.appendChild(document.createElement('h2')).textContent = location;
-        tablesContainer.appendChild(table);
+      const location = cells[4];
+
+      if (location !== currentLocation) {
+        currentLocation = location;
+        const locationHeader = document.createElement('div');
+        locationHeader.classList.add('location-header');
+        locationHeader.textContent = location;
+        itemsContainer.appendChild(locationHeader);
       }
 
-      const row = locationTables[location].getElementsByTagName('tbody')[0].insertRow();
-      for (let j = 1; j < cells.length; j++) { // Skip the first cell (Step)
-        if (j === 4) { //Skip the 5th cell (Location)
-          continue;
-        }
-        const cell = row.insertCell();
-        cell.textContent = cells[j];
-        if (j === 1) { // Completed column
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.checked = checkboxStates[i] || cells[j] === 'TRUE';
-          cell.innerHTML = '';
-          cell.appendChild(checkbox);
+      const itemContainer = document.createElement('div');
+      itemContainer.classList.add('item-container');
 
-          checkbox.addEventListener('change', function () {
-            checkboxStates[i] = checkbox.checked;
-            localStorage.setItem('checkboxStates', JSON.stringify(checkboxStates));
-          });
-        }
-      }
+      const completed = cells[1] === 'TRUE';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = checkboxStates[i] || completed;
+
+      checkbox.addEventListener('change', function () {
+        checkboxStates[i] = checkbox.checked;
+        localStorage.setItem('checkboxStates', JSON.stringify(checkboxStates));
+      });
+
+      const title = document.createElement('div');
+      title.classList.add('item-title');
+      title.appendChild(checkbox);
+      title.appendChild(document.createTextNode(` ${cells[2]}`)); // Item/Objective
+
+      itemContainer.appendChild(title);
+
+      const category = document.createElement('div');
+      category.classList.add('item-detail');
+      category.textContent = `Category: ${cells[3]}`; // Category
+      itemContainer.appendChild(category);
+
+      const notes = document.createElement('div');
+      notes.classList.add('item-detail');
+      notes.textContent = `Notes: ${cells[5]}`; // Notes
+      itemContainer.appendChild(notes);
+
+      itemsContainer.appendChild(itemContainer);
     }
   </script>
 
