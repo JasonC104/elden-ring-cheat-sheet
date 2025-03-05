@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width">
+  <title>Elden Ring Cheat Sheet</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 10px;
+    }
+
+    .toc {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .toc ol {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+
+    .toc a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .location-header {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-left: 5px solid #007bff;
+      border-radius: 5px;
+      color: #333;
+    }
+
+    .item-container {
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .item-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: flex;
+      /* Use flexbox for alignment */
+      align-items: center;
+      /* Center items vertically */
+    }
+
+    .item-title input[type="checkbox"] {
+      transform: scale(1.5);
+      /* Increase checkbox size */
+      margin-right: 10px;
+      /* Add some space between checkbox and label */
+    }
+
+    .item-detail {
+      margin-bottom: 5px;
+    }
+
+    /* Mobile-friendly styling */
+    @media (max-width: 600px) {
+      .container {
+        padding: 2px;
+      }
+
+      .item-title {
+        font-size: 1.2em;
+        /* Increase font size on mobile */
+      }
+
+      .item-title input[type="checkbox"] {
+        transform: scale(1.8);
+        /* Further increase checkbox size on mobile */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="toc" id="toc">
+      <ol></ol>
+    </div>
+  </div>
+
+  <div class="container" id="itemsContainer">
+  </div>
+
+  <script>
+    (async () => {
+      const res = await fetch("EldenRingWalkthrough-BaseGame.csv")
+      const data = await res.text()
+      // const data = `Step,Completed?,Item/Objective,Category,Location,Notes
+      // 1,FALSE,Tutorial Checkpoint,Checkpoint,Limgrave,Starting Area
+      // 2,FALSE,The Ring,Gesture,Elden Ring,Unlocked by pre-ordering Elden Ring or by defeating a boss as a Yellow Phantom
+      // 3,FALSE,Tarnished Wizened Finger,Online,Chapel of Anticipation,Online/PVP Item
+      // 4,FALSE,Grafted Scion Boss (1st Attempt),Boss,Chapel of Anticipation,"You can activate the boss and jump off the cliff. If you manage to win, you'll receive Ornamental Straight Sword and Golden Beast Crest Shield. You'll get another chance later"
+      // 5,FALSE,Cave of Knowledge,SoG/Location,Stranded Graveyard,Tutorial Cave
+      // 6,FALSE,Soldier of Godrick,Boss,Stranded Graveyard,Tutorial Boss
+      // 7,FALSE,Strength!,Gesture,Stranded Graveyard,Emote on the cliff at the end of the tutorial area
+      // 8,FALSE,Stranded Graveyard,SoG/Location,Stranded Graveyard,"After going through the door, rest at this SoG"
+      // 9,FALSE,Finger Severer,Online,Stranded Graveyward,Just past SoG
+      // 10,FALSE,Tarnished's Furled Finger,Online,Stranded Graveyard,Just past SoG
+      // 11,FALSE,Limgrave,Checkpoint,West Limgrave,First main area after leaving the Stranded Graveyard SoG and going up the lift
+      // 12,FALSE,First Step,SoG/Location,West Limgrave,
+      // 13,FALSE,Varre,NPC,West Limgrave,Speak to Varre at First Step SoG. Exhaust all dialogue
+      // 14,FALSE,Small Golden Effigy,Online,West Limgrave,Down slope from Varre
+      // 15,FALSE,Church of Elleh,SoG/Location,West Limgrave,"North of The First Step SoG, past the Tree Sentinel boss. Kale c..."
+      // 2744,FALSE,Shaman Set,Armor Set - Partial,Lands Between,"Horned Shaman, Nokron, Eternal City. Set includes the Shining Horned Headband which is a guarenteed drop from the shaman singing in the small ruin area West of the Hallowhorn Grounds"
+      // 2745,FALSE,Battle Hammer,Great Hammer,Lands Between,"Hammer Wielding Duelists, Near Colloseum in Leyndel. NOTE: Cannot be farmed after beating Maliketh"
+      // 2746,FALSE,Raya Lucarian Sorcerer Set,Armor Set - Partial,Lands Between,"Raya Lucarian Sorcerer, Raya Lucaria. Shared Leg Armor and Gloves with Lazuli Sorcerer Set"
+      // 2747,FALSE,Lazuli Sorcerer Set,Armor Set - Partial,Lands Between,"Glintstone Sorcerer, Raya Lucaria"
+      // 2748,FALSE,Haligtree Knight Set,Armor Set - Partial,Lands Between,"From the Drainage Channel SoG in the Haligtree, head out on the roots, follow until rampart/bridge to your right, then drop down again. NOTE: The helmet cannot be farmed but is found on a corpse earlier in the guide"
+      // 2749,FALSE,Sacrificial Twig,Talisman,Lands Between,Can be farmed by killing Lesser Wormface in Altus Plateau around the Minor Erdtree and in Southern Crumbling Farum Azula
+      // 2750,FALSE,"Smithing Stone 6, 7, 8",Upgrade Mat,Lands Between,"The Haligtree Soldiers found when leaving from the Prayer Room SoG drop these, and a decent amount of runes"
+      // 2751,FALSE,Erdtree Flower,Crafting,Lands Between,"You can find this all over in Limgrave and other areas. Early game you can find three near the Agheel Lake North SoG, near the swords in the ground"
+      // `;
+
+      const itemsContainer = document.getElementById('itemsContainer');
+      const tocList = document.querySelector('#toc ul');
+      const lines = CSVToArray(data.trim());
+      const headers = lines[0];
+
+      // Load checkbox states from local storage
+      const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates')) || {};
+
+      let currentLocation = null;
+      const locationIds = {}; // Store location IDs for TOC links
+      let locationCount = {}; // Track how many times a location appears
+
+      for (let i = 1; i < lines.length; i++) {
+        const cells = lines[i];
+        const location = cells[4];
+
+        if (location !== currentLocation) {
+          currentLocation = location;
+          if (!locationCount[location]) {
+            locationCount[location] = 0;
+          }
+          locationCount[location]++;
+
+          const locationId = `${location.toLowerCase().replace(/ /g, '-')}-${locationCount[location]}`; // Create unique ID
+          locationIds[location] = locationId;
+
+          const locationHeader = document.createElement('div');
+          locationHeader.classList.add('location-header');
+          locationHeader.textContent = location;
+          locationHeader.id = locationId;
+          itemsContainer.appendChild(locationHeader);
+
+          const tocItem = document.createElement('li');
+          const tocLink = document.createElement('a');
+          tocLink.href = `#${locationId}`;
+          tocLink.textContent = location;
+          tocItem.appendChild(tocLink);
+          tocList.appendChild(tocItem);
+        }
+
+        const itemContainer = document.createElement('div');
+        itemContainer.classList.add('item-container');
+
+        const completed = cells[1] === 'TRUE';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = checkboxStates[i] || completed;
+
+        checkbox.addEventListener('change', function () {
+          checkboxStates[i] = checkbox.checked;
+          localStorage.setItem('checkboxStates', JSON.stringify(checkboxStates));
+        });
+
+        const title = document.createElement('div');
+        title.classList.add('item-title');
+        title.appendChild(checkbox);
+        title.appendChild(document.createTextNode(` ${cells[2]}`));
+
+        itemContainer.appendChild(title);
+
+        const category = document.createElement('div');
+        category.classList.add('item-detail');
+        category.textContent = `Category: ${cells[3]}`;
+        itemContainer.appendChild(category);
+
+        const notes = document.createElement('div');
+        notes.classList.add('item-detail');
+        notes.textContent = `Notes: ${cells[5]}`;
+        itemContainer.appendChild(notes);
+
+        itemsContainer.appendChild(itemContainer);
+      }
+    })()
+
+    // This will parse a delimited string into an array of
+    // arrays. The default delimiter is the comma, but this
+    // can be overriden in the second argument.
+    // https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
+    function CSVToArray(strData, strDelimiter) {
+      // Check to see if the delimiter is defined. If not,
+      // then default to comma.
+      strDelimiter = (strDelimiter || ",");
+      // Create a regular expression to parse the CSV values.
+      var objPattern = new RegExp(
+        (
+          // Delimiters.
+          "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+          // Quoted fields.
+          "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+          // Standard fields.
+          "([^\"\\" + strDelimiter + "\\r\\n]*))"
+        ),
+        "gi"
+      );
+      // Create an array to hold our data. Give the array
+      // a default empty first row.
+      var arrData = [[]];
+      // Create an array to hold our individual pattern
+      // matching groups.
+      var arrMatches = null;
+      // Keep looping over the regular expression matches
+      // until we can no longer find a match.
+      while (arrMatches = objPattern.exec(strData)) {
+        // Get the delimiter that was found.
+        var strMatchedDelimiter = arrMatches[1];
+        // Check to see if the given delimiter has a length
+        // (is not the start of string) and if it matches
+        // field delimiter. If id does not, then we know
+        // that this delimiter is a row delimiter.
+        if (
+          strMatchedDelimiter.length &&
+          (strMatchedDelimiter != strDelimiter)
+        ) {
+          // Since we have reached a new row of data,
+          // add an empty row to our data array.
+          arrData.push([]);
+        }
+        // Now that we have our delimiter out of the way,
+        // let's check to see which kind of value we
+        // captured (quoted or unquoted).
+        if (arrMatches[2]) {
+          // We found a quoted value. When we capture
+          // this value, unescape any double quotes.
+          var strMatchedValue = arrMatches[2].replace(
+            new RegExp("\"\"", "g"),
+            "\""
+          );
+        } else {
+          // We found a non-quoted value.
+          var strMatchedValue = arrMatches[3];
+        }
+        // Now that we have our value string, let's add
+        // it to the data array.
+        arrData[arrData.length - 1].push(strMatchedValue);
+      }
+      // Return the parsed data.
+      return (arrData);
+    }
+  </script>
+
+</body>
+
+</html>
