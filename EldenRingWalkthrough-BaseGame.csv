@@ -36,7 +36,7 @@ Step,Completed?,Item/Objective,Category,Location,Notes
 35,FALSE,Ranni,NPC,West Limgrave,Warp back after getting Torrent to speak to Renna (Ranni). Exhaust Dialogue to get Spirit Calling Bell and Lone Wolf Ashes. Continue exhausting dialogue until she disappears
 36,FALSE,Spirit Calling Bell,Key Item,Church of Elleh,Received from Ranni when you first meet her at the Church of Elleh
 37,FALSE,Lone Wolf Ashes,Spirit Ashes,Church of Elleh,Received from Ranni when you first meet her at the Church of Elleh
-38,FALSE,Melina,NPC,Chuch of Elleh,Rest at Church of Elleh SoG and speak to Melina
+38,FALSE,Melina,NPC,Church of Elleh,Rest at Church of Elleh SoG and speak to Melina
 39,FALSE,Kale,NPC,Church of Elleh,Speak to Kale to hear about the merchants and some lore
 40,FALSE,Melina,NPC,West Limgrave,Speak to Melina at Agheel Lake North SoG by resting at the SoG
 41,FALSE,Boc,NPC,West Limgrave,"Head Southeast from the Agheel Lake North SoG. Between bridge and telescope, roll into a little tree to reveal Boc"
@@ -966,7 +966,7 @@ Step,Completed?,Item/Objective,Category,Location,Notes
 965,FALSE,Aeonia Swamp Shore,SoG/Location,Caelid,"From the Astray from Caelid Highway North SoG, head East toward the swamp"
 966,FALSE,Ghost,Ghost,Caelid,Speak to ghost near Aeonia Swamp Shore SoG for lore
 967,FALSE,Nomadic Merchant,NPC,Caelid,East from Astray form Caelid Highway North SoG. Doesn't sell anything significant. Kill for Nomadic Merchant's Bell Bearing 9
-968,FALSE,Nomadic Merchant's Bell Bearing 9,Bell Bearing,Caelid ,Dropped by Nomadic Merchant near Astray from Caelid Highway North SoG
+968,FALSE,Nomadic Merchant's Bell Bearing 9,Bell Bearing,Caelid,Dropped by Nomadic Merchant near Astray from Caelid Highway North SoG
 969,FALSE,Caelid Highway South,SoG/Location,Caelid,"From Astray from Caelid Highway North SoG, Head South"
 970,FALSE,Larval Tear,Key Item,Caelid,"South of the Caelid Highway South SoG along the cliff, find a Troll disguised as a Wandering Noble near the stone coffins. Drops the Larval Tear when defeated"
 971,FALSE,Map: Caelid,Map,Caelid,Found along the road from Caelid Highway South SoG
